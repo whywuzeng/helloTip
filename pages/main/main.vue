@@ -7,22 +7,22 @@
 			<view>
 				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
 				 @scroll="scroll">
-					<view id="demo1" class="scroll-view-item uni-bg-red">
-						<text>{{text.title}}</text>
-						<view class="uni-list">
-							<radio-group @change="radioChange">
-								<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in text.answer" :key="item.value">
-									<text>1111</text>
-									<view>
-										<radio :value="item.value" :checked="index === current" />
-										<!-- :value="item.value" -->
-									</view>
-								</label>
-							</radio-group>
-						</view>
+					<view class="self-scroll-view-item" v-for="(item,index) in question" :key="item.id">
+					<text>{{item.title}}</text>
+					<view class="uni-list">
+						<radio-group @change="radioChange">
+							<label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index) in item.answer" :key="item1.value">
+								<view>{{item1.name}}</view>
+								<view>
+									<radio :value="item1.value" :checked="index === current" /> 
+									<!-- @click="radioClick(item1)" -->
+								</view>
+							</label>
+						</radio-group>
 					</view>
-					<view id="demo2" class="scroll-view-item uni-bg-green">B</view>
-					<view id="demo3" class="scroll-view-item uni-bg-blue">C</view>
+					</view>
+					<!-- <view id="demo2" class="scroll-view-item uni-bg-green">B</view>
+					<view id="demo3" class="scroll-view-item uni-bg-blue">C</view> -->
 				</scroll-view>
 			</view>
 			<view @tap="goTop" class="uni-link uni-center uni-common-mt">
@@ -53,13 +53,7 @@
 				old: {
 					scrollTop: 0
 				},
-				// question:[
-				// 	text:{
-				// 		title:"问题1：黄河为什么是黄的？",
-				// 		answer:["A:太多沙","B:太多沙","C:太多沙"],
-				// 	},
-				// ],
-				text: {
+				question: [{
 					title: "问题1：黄河为什么是黄的？",
 					answer: [{
 							value: 'A',
@@ -75,18 +69,75 @@
 							name: 'C:太多沙'
 						}
 					]
-				},
+				}, 
+				{
+					title: "问题1：黄河为什么是黄的？",
+					answer: [{
+							value: 'A',
+							name: 'A:太多沙2'
+						},
+						{
+							value: 'B',
+							name: 'B:太多沙2',
+							checked: 'true'
+						},
+						{
+							value: 'C',
+							name: 'C:太多沙2'
+						}
+					]
+				}, 
+				{
+					title: "问题1：黄河为什么是黄的？",
+					answer: [{
+							value: 'A',
+							name: 'A:太多沙3'
+						},
+						{
+							value: 'B',
+							name: 'B:太多沙3',
+							checked: 'true'
+						},
+						{
+							value: 'C',
+							name: 'C:太多沙3'
+						}
+					]
+				}, 
+				{
+					title: "问题1：黄河为什么是黄的？",
+					answer: [{
+							value: 'A',
+							name: 'A:太多沙4'
+						},
+						{
+							value: 'B',
+							name: 'B:太多沙4',
+							checked: 'true'
+						},
+						{
+							value: 'C',
+							name: 'C:太多沙4'
+						}
+					]
+				}, 
+				],
 				current: 0,
 			}
 		},
 		methods: {
 			radioChange(evt) {
-				for (let i = 0; i < this.text.answer.length; i++) {
-					if (this.text.answer[i].value === evt.target.value) {
+				// console.log("item"+JSON.stringify(item));
+				console.log("evt"+JSON.stringify(evt));
+				for (let i = 0; i < item.answer.length; i++) {
+					if (item.answer[i].value === evt.target.value) {
 						this.current = i;
 						break;
 					}
 				}
+			},
+			radioClick(item){
+				console.log("item"+JSON.stringify(item));
 			},
 			upper: function(e) {
 				console.log(e)
