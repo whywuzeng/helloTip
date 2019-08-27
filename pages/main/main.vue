@@ -1,21 +1,19 @@
 <template>
 	<view class="content">
 		<view v-if="hasLogin" class="hello">
-			<view class="title">
+			<!-- <view class="title">
 				您好 {{userName}}，您已成功登录。
-			</view>
+			</view> -->
 			<view>
-				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
-				 @scroll="scroll">
+				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower" @scroll="scroll">
 					<view class="self-scroll-view-item" v-for="(item,index) in question" :key="item.id">
 					<text>{{item.title}}</text>
 					<view class="uni-list">
-						<radio-group @change="radioChange">
-							<label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index) in item.answer" :key="item1.value">
+						<radio-group @change="radioChange($event,index)">
+							<label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index1) in item.answer">
 								<view>{{item1.name}}</view>
 								<view>
-									<radio :value="item1.value" :checked="index === current" /> 
-									<!-- @click="radioClick(item1)" -->
+									<radio   :value="index1"  :checked="item1.checked=='true'" /> 
 								</view>
 							</label>
 						</radio-group>
@@ -25,8 +23,8 @@
 					<view id="demo3" class="scroll-view-item uni-bg-blue">C</view> -->
 				</scroll-view>
 			</view>
-			<view @tap="goTop" class="uni-link uni-center uni-common-mt">
-				点击这里返回顶部
+			<view @tap="sumbmit" class="uni-link uni-center uni-common-mt"> 
+				<button v-if="hasLogin" type="default" @tap="bindLogout">提交</button>
 			</view>
 		</view>
 		<view v-if="!hasLogin" class="hello">
@@ -121,24 +119,19 @@
 						}
 					]
 				}, 
-				],
-				current: 0,
+				]
 			}
 		},
 		methods: {
-			radioChange(evt) {
-				// console.log("item"+JSON.stringify(item));
-				console.log("evt"+JSON.stringify(evt));
-				for (let i = 0; i < item.answer.length; i++) {
-					if (item.answer[i].value === evt.target.value) {
-						this.current = i;
-						break;
-					}
+			radioChange(evt,item) {
+				console.log(`evt${JSON.stringify(evt)}item${item}`);
+				for (let i = 0; i < this.question[item].answer.length; i++) {
+					this.question[item].answer[i].checked = "false";
 				}
+				this.question[item].answer[parseInt(evt.target.value)].checked = "true";
+				console.log(`question${JSON.stringify(this.question)}`);
 			},
-			radioClick(item){
-				console.log("item"+JSON.stringify(item));
-			},
+			
 			upper: function(e) {
 				console.log(e)
 			},
@@ -149,17 +142,9 @@
 				console.log(e)
 				this.old.scrollTop = e.detail.scrollTop
 			},
-			goTop: function(e) {
-				// 解决view层不同步的问题
-				this.scrollTop = this.old.scrollTop
-				this.$nextTick(function() {
-					this.scrollTop = 0
-				});
-				uni.showToast({
-					icon: "none",
-					title: "纵向滚动 scrollTop 值已被修改为 0"
-				})
-			},
+			sumbmit: function() {
+				
+			}	
 		},
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
 		onLoad() {
