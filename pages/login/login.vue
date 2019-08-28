@@ -9,15 +9,15 @@
 				<text class="title" style="width: 30%;">供应商编码：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="coding" placeholder="请输入编码"></m-input>
 			</view>
-			<view class="input-row">
+			<view class="input-row border">
 				<!-- <text class="title">密码：</text>
 				<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input> -->
-				<view class="uni-padding-wrap">
-				            
-				            <view>
-				                <label class="radio" v-for="(item,index) in selectItem" :key="item.name"><radio :value="item.name" :checked="item.checked" />{{item.name}}</label>
-				                
-				            </view>
+				<view class="uni-padding-wrap" style="padding:10upx 25upx;">
+							<radio-group class="radio-group" @change="radioChange">
+							      <label class="radio" v-for="(item, index) in selectItem" :key="item.name">
+							        <radio :value="index" :checked="item.checked"/> {{item.name}}
+							      </label>
+							    </radio-group>
 				        </view>
 			</view>
 		</view>
@@ -57,7 +57,7 @@
 				password: '',
 				coding: '',
 				positionTop: 0,
-				selectItem:[{name:"配送",checked:true,name:"自提",checked:false}]
+				selectItem:[{name:"配送",checked:true},{name:"自提",checked:false}]
 			}
 		},
 		computed: mapState(['forcedLogin']),
@@ -104,18 +104,18 @@
 					});
 					return;
 				}
-				if (this.password.length < 6) {
-					uni.showToast({
-						icon: 'none',
-						title: '密码最短为 6 个字符'
-					});
-					return;
-				}
+				// if (this.password.length < 6) {
+				// 	uni.showToast({
+				// 		icon: 'none',
+				// 		title: '密码最短为 6 个字符'
+				// 	});
+				// 	return;
+				// }
 				
 				if (this.coding.length < 6) {
 					uni.showToast({
 						icon: 'none',
-						title: '编码最短为 6 个字符'
+						title: '供应商编码最短为6个字符'
 					});
 					return;
 				}
@@ -166,15 +166,19 @@
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
-				if (this.forcedLogin) {
-					uni.reLaunch({
-						url: '../main/main',
-					});
-				} else {
-					uni.navigateBack();
-				}
+				uni.reLaunch({
+					url: '../main/main',
+				});
 
-			}
+			},
+			radioChange(evt) {
+				console.log(`evt:${JSON.stringify(evt)}`);
+				for (let index in this.selectItem) {
+					this.selectItem[index].checked = false;
+				}
+				this.selectItem[parseInt(evt.target.value)].checked = true;
+				console.log(`selectItem:${JSON.stringify(this.selectItem)}`);
+				}
 		},
 		onReady() {
 			this.initPosition();
