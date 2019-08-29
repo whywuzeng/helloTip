@@ -7,7 +7,7 @@
 			<view>
 				<scroll-view scroll-y="true" class="scroll-Y">
 					<view class="self-scroll-view-item" v-for="(item,index) in question" :key="item.id">
-					<text>{{item.title + (item.isMultiple ? "(多选)" : "")}}</text>
+					<text>{{"问题" + (index+1) +"："+ item.title + (item.isMultiple ? "(多选)" : "")}}</text>
 					<view  class="uni-list">
 						<checkbox-group v-if="item.isMultiple" @change="radioChange($event,index)">
 						                <label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index1) in item.answer">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+	import request from './question.js';
 	import {
 		mapState
 	} from 'vuex'
@@ -60,93 +61,7 @@
 				old: {
 					scrollTop: 0
 				},
-				question: [{
-					title: "问题1：黄河为什么是黄的？",
-					answer: [{
-							value: 'A',
-							name: 'A:太多沙'
-						},
-						{
-							value: 'B',
-							name: 'B:太多沙',
-							checked: 'true'
-						},
-						{
-							value: 'C',
-							name: 'C:太多沙'
-						}
-					]
-				}, 
-				{
-					title: "问题1：黄河为什么是黄的？",
-					answer: [{
-							value: 'A',
-							name: 'A:太多沙2'
-						},
-						{
-							value: 'B',
-							name: 'B:太多沙2',
-							checked: 'true'
-						},
-						{
-							value: 'C',
-							name: 'C:太多沙2'
-						}
-					]
-				}, 
-				{
-					title: "问题1：黄河为什么是黄的？",
-					answer: [{
-							value: 'A',
-							name: 'A:太多沙3'
-						},
-						{
-							value: 'B',
-							name: 'B:太多沙3',
-							checked: 'true'
-						},
-						{
-							value: 'C',
-							name: 'C:太多沙3'
-						}
-					]
-				}, 
-				{
-					title: "问题1：黄河为什么是黄的？",
-					answer: [{
-							value: 'A',
-							name: 'A:太多沙4'
-						},
-						{
-							value: 'B',
-							name: 'B:太多沙4',
-							checked: 'true'
-						},
-						{
-							value: 'C',
-							name: 'C:太多沙4'
-						}
-					]
-				},
-				{
-					title: "问题1：黄河为什么是黄的？",
-					isMultiple:true,
-					answer: [{
-							value: 'A',
-							name: 'A:太多沙4'
-						},
-						{
-							value: 'B',
-							name: 'B:太多沙4',
-							checked: 'true'
-						},
-						{
-							value: 'C',
-							name: 'C:太多沙4'
-						}
-					]
-				}
-				]
+				question:[]
 			}
 		},
 		methods: {
@@ -204,6 +119,10 @@
 						}
 					}
 				});
+			}
+			else {
+				
+				this.question = request.peisongData();
 			}
 		}
 	}

@@ -1,28 +1,34 @@
 <template>
 	<view class="content">
 		<view class="input-group">
-			<view class="input-row border">
+			<!-- <view class="input-row border">
 				<text class="title">账号：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
-			</view>
+			</view> -->
 			<view class="input-row border">
 				<text class="title" style="width: 30%;">供应商编码：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="coding" placeholder="请输入编码"></m-input>
 			</view>
 			<view class="input-row border">
+				
 				<!-- <text class="title">密码：</text>
 				<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input> -->
-				<view class="uni-padding-wrap" style="padding:10upx 25upx;">
-							<radio-group class="radio-group" @change="radioChange">
-							      <label class="radio" v-for="(item, index) in selectItem" :key="item.name">
-							        <radio :value="index" :checked="item.checked"/> {{item.name}}
-							      </label>
-							    </radio-group>
-				        </view>
+				
+					<checkbox-group  @change="radioChange">
+					                <label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in selectItem" :key="item.name">
+										
+					                    <view>
+					                        <checkbox :value="item.name" :checked="item.checked" />
+					                    </view>
+										<view>{{item.name}}</view>
+					                    
+					                </label>
+					 </checkbox-group>
+				 
 			</view>
 		</view>
 		<view class="btn-row">
-			<button type="primary" class="primary" @tap="bindLogin">登录</button>
+			<button type="primary" class="primary" @tap="bindLogin">开始调研</button>
 		</view>
 		<!-- <view class="action-row">
 			<navigator url="../reg/reg">注册账号</navigator>
@@ -97,13 +103,13 @@
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
-				if (this.account.length < 5) {
-					uni.showToast({
-						icon: 'none',
-						title: '账号最短为 5 个字符'
-					});
-					return;
-				}
+				// if (this.account.length < 5) {
+				// 	uni.showToast({
+				// 		icon: 'none',
+				// 		title: '账号最短为 5 个字符'
+				// 	});
+				// 	return;
+				// }
 				// if (this.password.length < 6) {
 				// 	uni.showToast({
 				// 		icon: 'none',
@@ -173,10 +179,15 @@
 			},
 			radioChange(evt) {
 				console.log(`evt:${JSON.stringify(evt)}`);
-				for (let index in this.selectItem) {
-					this.selectItem[index].checked = false;
-				}
-				this.selectItem[parseInt(evt.target.value)].checked = true;
+				let values = evt.detail.value;
+				                for (let i = 0, lenI = this.selectItem.length; i < lenI; ++i) {
+				                    let eachItem = this.selectItem[i];
+				                    if(values.includes(eachItem.name)){
+				                        this.$set(eachItem,'checked',true)
+				                    }else{
+				                        this.$set(eachItem,'checked',false)
+				                    }
+				                }
 				console.log(`selectItem:${JSON.stringify(this.selectItem)}`);
 				}
 		},
