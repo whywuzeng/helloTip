@@ -14,7 +14,7 @@
 				<!-- <text class="title">密码：</text>
 				<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input> -->
 				
-					<checkbox-group  @change="radioChange">
+					<checkbox-group  @change="radioChange" style="display: flex;">
 					                <label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in selectItem" :key="item.name">
 										
 					                    <view>
@@ -118,10 +118,19 @@
 				// 	return;
 				// }
 				
-				if (this.coding.length < 6) {
+				if (this.coding.length <= 0) {
 					uni.showToast({
 						icon: 'none',
-						title: '供应商编码最短为6个字符'
+						title: '供应商编码不能为空'
+					});
+					return;
+				}
+				let filterArr = this.selectItem.filter(item => item.checked == true);
+				// console.log(`filter:${JSON.stringify(filterArr)}`);
+				if (filterArr.length <= 0) {
+					uni.showToast({
+						icon: 'none',
+						title: '请选择配送或自提至少一种'
 					});
 					return;
 				}
@@ -130,21 +139,30 @@
 				 * 检测用户账号密码是否在已注册的用户列表中
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
-				const data = {
-					account: this.account,
-					password: this.password
-				};
-				const validUser = service.getUsers().some(function(user) {
-					return data.account === user.account && data.password === user.password;
+				uni.request({
+				    url:`http://192.168.1.245:8080/api/supplier/${this.coding}`,//仅为示例，并非真实接口地址。
+				    data: {},
+				    success: (res) => {
+						console.log(res.data.result.supplierName);
+						if (res.data.code == 1) {
+								this.toMain(this.coding,res.data.result.supplierName,filterArr);
+						}
+						else {
+							uni.showToast({
+								icon: 'none',
+								title: '供应商编码错误'
+							});
+						}
+				    }
 				});
-				if (validUser) {
-					this.toMain(this.account);
-				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '用户账号或密码不正确',
-					});
-				}
+				// if (validUser) {
+				
+				// } else {
+				// 	uni.showToast({
+				// 		icon: 'none',
+				// 		title: '用户账号或密码不正确',
+				// 	});
+				// }
 			},
 			oauth(value) {
 				uni.login({
@@ -166,8 +184,13 @@
 					}
 				});
 			},
-			toMain(userName) {
-				this.login(userName);
+			toMain(code,supplierName,filterArr) {
+				let obj = {
+					code:code,
+					supplierName:supplierName,
+					filterArr:filterArr
+				};
+				this.login(obj);
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式

@@ -10,15 +10,21 @@ const store = new Vuex.Store({
          */
         forcedLogin: false,
         hasLogin: false,
-        userName: ""
+        userName: "",
+		code:"",
+		supplierName:"",
+		selectType:[]
     },
     mutations: {
-        login(state, userName) {
-            state.userName = userName || '新用户';
+        login(state, obj) {
+            state.code = obj.code;
             state.hasLogin = true;
+			state.supplierName = obj.supplierName;
+			state.selectType = obj.filterArr;
         },
         logout(state) {
-            state.userName = "";
+            state.code = "";
+			state.supplierName = "";
             state.hasLogin = false;
         }
     }

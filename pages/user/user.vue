@@ -2,8 +2,9 @@
     <view class="content">
 		<uni-list v-if="hasLogin">
 		   
-		    <uni-list-item title="账号" show-badge="true" :badge-text="userName" badge-type = "default" show-arrow="false"></uni-list-item>
+		    <!-- <uni-list-item title="账号" show-badge="true" :badge-text="userName" badge-type = "default" show-arrow="false"></uni-list-item> -->
 		    <uni-list-item title="供应商编码" show-badge="true" :badge-text="code" badge-type = "default" show-arrow="false"></uni-list-item>
+			<uni-list-item title="供应商名称" show-badge="true" :badge-text="supplierName" badge-type = "default" show-arrow="false"></uni-list-item>
 		</uni-list> 
         <view class="btn-row">
             <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>
@@ -23,7 +24,7 @@
     export default {
 		components: {uniList,uniListItem},
         computed: {
-            ...mapState(['hasLogin', 'forcedLogin','code','userName'])
+            ...mapState(['hasLogin', 'forcedLogin','code','userName',"supplierName"])
         },
         methods: {
             ...mapMutations(['logout']),

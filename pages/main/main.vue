@@ -18,6 +18,11 @@
 						                    
 						                </label>
 						 </checkbox-group>
+						 
+						 <view v-else-if="item.isFillIn" class="uni-textarea">
+						         <textarea @input="contentChange($event,index)" v-model="item.content" placeholder-style="color:gray" :placeholder="item.placeholder">
+								 </textarea>
+						 </view>
 									
 						<radio-group v-else  @change="radioChange($event,index)">
 							<label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index1) in item.answer">
@@ -61,7 +66,7 @@
 				old: {
 					scrollTop: 0
 				},
-				question:[]
+				question:[],
 			}
 		},
 		methods: {
@@ -77,22 +82,28 @@
 					                    }else{
 					                        this.$set(eachItem,'checked',"false")
 					                    }
-					                }
+					                }		
 					console.log(`question${JSON.stringify(this.question)}`);
 					return;
 				}
 				for (let i = 0; i < this.question[item].answer.length; i++) {
 					this.question[item].answer[i].checked = "false";
+					
 				}
+				
 				this.question[item].answer[parseInt(evt.target.value)].checked = "true";
 				console.log(`question${JSON.stringify(this.question)}`);
 			},
 			
 			sumbmit: function() {
-				
-			}	
+				console.log(`question${JSON.stringify(this.question)}`);
+			},
+			contentChange(avg,index) {
+				this.question[index].content = avg.detail.value;
+			}
+			
 		},
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName',"selectType"]),
 		onLoad() {
 			if (!this.hasLogin) {
 				uni.showModal({
@@ -121,8 +132,15 @@
 				});
 			}
 			else {
+				if (this.selectType.length == 2) {
+					this.question = request.allData();
+				}
+				else if (this.selectType[0].name == "配送") {
+					this.question = request.peisongData();
+				}else {
+					this.question = request.zitiData();
+				}
 				
-				this.question = request.peisongData();
 			}
 		}
 	}
