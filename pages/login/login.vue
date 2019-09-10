@@ -140,7 +140,7 @@
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
 				uni.request({
-				    url:`http://192.168.1.245:8080/api/supplier/${this.coding}`,//仅为示例，并非真实接口地址。
+				    url:`http://localhost:8080/api/supplier/${this.coding}`,//仅为示例，并非真实接口地址。
 				    data: {},
 				    success: (res) => {
 						console.log(res.data.result.supplierName);

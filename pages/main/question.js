@@ -3,6 +3,7 @@
 const allData = function () {
     let ret =  [{
 					title: "0-10分，您有多大可能推荐我们的品牌和产品给其他经销商或亲朋好友?",
+					reason:"",
 					answer: [{
 							value: '0',
 							name: '0'
@@ -52,6 +53,7 @@ const allData = function () {
 				{
 					title: "关于百威中国",
 					isMultiple:true,
+					reason:"",
 					answer: [{
 							value: '1',
 							name: '合作伙伴关系'
@@ -65,6 +67,7 @@ const allData = function () {
 				{
 					title: "产品质量",
 					isMultiple:true,
+					reason:"",
 					answer: [{
 							value: '1',
 							name: '产品包装 ( 比如包装损坏（纸箱撕裂/压破/凹陷/开胶掉底/塑箱断裂）'
@@ -82,6 +85,7 @@ const allData = function () {
 				{
 					title: "下单和收货(包括配送和自提）的体验 ",
 					isMultiple:true,
+					reason:"",
 					answer: [{
 							value: '1',
 							name: '运输包装安全性（货物稳定/完整）'
@@ -104,7 +108,7 @@ const allData = function () {
 						},
 						{
 							value: '6',
-							name: '工厂能按车辆预约时间（±2小时）将车辆准时放行进厂'
+							name: '工厂能按车辆预约时间（±2小时）将车辆准时放行进厂' 
 						},
 						{
 							value: '7',
@@ -115,6 +119,7 @@ const allData = function () {
 				{
 					title: "客户服务和售后支持",
 					isMultiple:true,
+					reason:"",
 					answer: [{
 							value: '1',
 							name: '价格和促销活动'
@@ -153,6 +158,7 @@ const allData = function () {
 const peisongData = function () {
     let ret =  [{
 					title: "0-10分，您有多大可能推荐我们的品牌和产品给其他经销商或亲朋好友?",
+					reason:"",
 					answer: [{
 							value: '0',
 							name: '0'
@@ -201,6 +207,7 @@ const peisongData = function () {
 				}, 
 				{
 					title: "关于百威中国",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',
@@ -214,6 +221,7 @@ const peisongData = function () {
 				}, 
 				{
 					title: "产品质量",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',
@@ -231,6 +239,7 @@ const peisongData = function () {
 				}, 
 				{
 					title: "下单和收货(包括配送和自提）的体验 ",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',
@@ -252,6 +261,7 @@ const peisongData = function () {
 				},
 				{
 					title: "客户服务和售后支持",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',
@@ -291,6 +301,7 @@ const peisongData = function () {
 const zitiData = function () {
     let ret =  [{
 					title: "0-10分，您有多大可能推荐我们的品牌和产品给其他经销商或亲朋好友?",
+					reason:"",
 					answer: [{
 							value: '0',
 							name: '0'
@@ -339,6 +350,7 @@ const zitiData = function () {
 				}, 
 				{
 					title: "关于百威中国",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',
@@ -352,6 +364,7 @@ const zitiData = function () {
 				}, 
 				{
 					title: "产品质量",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',
@@ -369,6 +382,7 @@ const zitiData = function () {
 				}, 
 				{
 					title: "下单和收货(包括配送和自提）的体验 ",
+					reason:"",
 					isMultiple:true,
 					answer: [
 						{
@@ -387,6 +401,7 @@ const zitiData = function () {
 				},
 				{
 					title: "客户服务和售后支持",
+					reason:"",
 					isMultiple:true,
 					answer: [{
 							value: '1',

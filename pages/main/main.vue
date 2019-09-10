@@ -32,8 +32,14 @@
 								</view>
 							</label>
 						</radio-group>
+						<view v-if="!item.isFillIn" class="uni-textarea">
+						        <textarea   @input="reasonChange($event,index)" v-model="item.reason" placeholder-style="color:gray" placeholder="请输入选择的理由">
+						        </textarea>
+						</view>
+						
 						
 					</view>
+					
 					</view>
 					<view @tap="sumbmit" class="uni-link uni-center uni-common-mt">
 						<button v-if="hasLogin" type="default">提交</button>
@@ -56,8 +62,9 @@
 <script>
 	import request from './question.js';
 	import {
-		mapState
-	} from 'vuex'
+	    mapState,
+	    mapMutations
+	} from 'vuex';
 
 	export default {
 		data() {
@@ -70,6 +77,7 @@
 			}
 		},
 		methods: {
+			...mapMutations(['logout']),
 			radioChange(evt,item) {
 				console.log(`evt${JSON.stringify(evt)}item${item}`);
 				//为多选
@@ -88,7 +96,6 @@
 				}
 				for (let i = 0; i < this.question[item].answer.length; i++) {
 					this.question[item].answer[i].checked = "false";
-					
 				}
 				
 				this.question[item].answer[parseInt(evt.target.value)].checked = "true";
@@ -96,14 +103,65 @@
 			},
 			
 			sumbmit: function() {
-				console.log(`question${JSON.stringify(this.question)}`);
+				// console.log(`question${JSON.stringify(this.question)}`);
+				for (let i = 0; i < this.question.length; i++) {
+					if (this.question[i].answer == null) {
+						continue;
+					}
+					let selectAnser = this.question[i].answer.filter(item => item.checked == "true");
+					if (selectAnser.length <= 0) {
+						uni.showToast({
+							icon: 'none',
+							title: '请填写问题'+(i+1)
+						});
+						return;
+					}
+					console.log(this.question[i].reason);
+					if (this.question[i].reason.length<=0) { 
+						uni.showToast({
+							icon: 'none',
+							title: '请填写问题'+(i+1)+"的原因"
+						});
+						return;
+						
+					}
+				};
+				uni.request({
+				    url:`http://localhost:8080/api/supplier/saveQuestion`,//仅为示例，并非真实接口地址。
+				    data: {code:this.code,question:this.question},
+					method:"POST",
+				    success: (res) => {
+						if (res.data.code == 1) {
+								uni.showToast({
+									icon: 'none',
+									title: "提交成功"
+								});
+								this.logout();
+								uni.navigateBack({
+								    delta: 1,
+								    animationType: 'pop-out',
+								    animationDuration: 200
+								});
+						}
+						else {
+							uni.showToast({
+								icon: 'none',
+								title: res.data.message
+							});
+						}
+				    }
+				});
+				
 			},
 			contentChange(avg,index) {
 				this.question[index].content = avg.detail.value;
+			},
+			reasonChange (avg,index) {
+				this.question[index].reason = avg.detail.value;
 			}
 			
 		},
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName',"selectType"]),
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName',"selectType","code"]),
 		onLoad() {
 			if (!this.hasLogin) {
 				uni.showModal({
