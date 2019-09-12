@@ -127,7 +127,7 @@
 					}
 				};
 				uni.request({
-				    url:`http://localhost:8080/api/supplier/saveQuestion`,//仅为示例，并非真实接口地址。
+				    url:`http://172.18.252.5:8081/xiaopro/api/supplier/saveQuestion`,//仅为示例，并非真实接口地址。
 				    data: {code:this.code,question:this.question},
 					method:"POST",
 				    success: (res) => {
@@ -149,7 +149,13 @@
 								title: res.data.message
 							});
 						}
-				    }
+				    },
+					fail:(res) => {
+						uni.showToast({
+							icon: 'none',
+							title: '网络错误'
+						});
+					}
 				});
 				
 			},
