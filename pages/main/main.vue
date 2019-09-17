@@ -1,16 +1,18 @@
 <template>
-	<view class="content">
-		<view v-if="hasLogin" class="hello">
+	<!-- <view style="flex: 1;display: flex"> -->
+		<view scroll-y="true" show-scrollbar="false" style="flex:1;background-color: #efeff4;padding: 20upx;">
+		<view v-if="hasLogin" class="hello" >
 			<!-- <view class="title">
 				您好 {{userName}}，您已成功登录。
 			</view> -->
-			<view>
-				<scroll-view scroll-y="true" class="scroll-Y">
+			
+					
 					<view class="self-scroll-view-item" v-for="(item,index) in question" :key="item.id">
 					<text>{{"问题" + (index+1) +"："+ item.title + (item.isMultiple ? "(多选)" : "")}}</text>
+					
 					<view  class="uni-list">
 						<checkbox-group v-if="item.isMultiple" @change="radioChange($event,index)">
-						                <label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index1) in item.answer">
+						                <label class="uni-list-cell uni-list-cell-pd" v-for="(item1, index1) in item.answer" :key="index1">
 											<view>{{item1.name}}</view>
 						                    <view>
 						                        <checkbox :value="item1.value" :checked="item1.checked=='true'" />
@@ -32,20 +34,23 @@
 								</view>
 							</label>
 						</radio-group>
+						
+					</view>
+					<view class="">
 						<view v-if="!item.isFillIn" class="uni-textarea">
 						        <textarea   @input="reasonChange($event,index)" v-model="item.reason" placeholder-style="color:gray" placeholder="请输入选择的理由">
 						        </textarea>
 						</view>
-						
-						
 					</view>
 					
+					
 					</view>
+					
 					<view @tap="sumbmit" class="uni-link uni-center uni-common-mt">
 						<button v-if="hasLogin" type="default">提交</button>
 					</view>
-				</scroll-view>
-			</view>
+				
+			
 			
 		</view>
 		<view v-if="!hasLogin" class="hello">
@@ -56,7 +61,8 @@
 				<view>在 “我的” 中点击 “登录” 可以 “登录您的账户”</view>
 			</view>
 		</view>
-	</view>
+		</view>
+	<!-- </view> -->
 </template>
 
 <script>
@@ -126,12 +132,42 @@
 						
 					}
 				};
+				let requestAttr = [];
+				this.question.forEach(element => {
+					let eachItem = {};
+					let anwser = "";
+					if (element.isFillIn != true) {
+						let anwserArr = element.answer.filter((item) => item.checked == "true");
+						anwserArr.forEach (e => {
+							if (anwser.length <= 0) {
+								anwser = e.name;
+							}
+							else {
+								anwser += "," + e.name;
+							}
+						});
+						eachItem.title = element.title;
+						eachItem.reason = element.reason;
+						eachItem.answer = anwser;
+						eachItem.code = this.code;
+						requestAttr.push(eachItem);
+					}
+					else {
+						eachItem.title = element.title;
+						eachItem.reason = "";
+						eachItem.answer = element.content;
+						eachItem.code = this.code;
+						requestAttr.push(eachItem);
+					}
+				});
+				console.log(`requestAttr:${JSON.stringify(requestAttr)}`);
 				uni.request({
-				    url:`http://172.18.252.5:8081/xiaopro/api/supplier/saveQuestion`,//仅为示例，并非真实接口地址。
-				    data: {code:this.code,question:this.question},
+				    url:`https://wccstest.ab-inbev.cn/WCCSAPI/WechatProgram.aspx?type=02`,//仅为示例，并非真实接口地址。
+				    data: requestAttr, 
 					method:"POST",
 				    success: (res) => {
-						if (res.data.code == 1) {
+						console.log(`${JSON.stringify(res.data)}`);
+						if (res.data.Result == "True") {
 								uni.showToast({
 									icon: 'none',
 									title: "提交成功"
@@ -146,7 +182,7 @@
 						else {
 							uni.showToast({
 								icon: 'none',
-								title: res.data.message
+								title: "提交失败"
 							});
 						}
 				    },

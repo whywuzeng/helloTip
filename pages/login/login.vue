@@ -6,7 +6,7 @@
 				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
 			</view> -->
 			<view class="input-row border">
-				<text class="title" style="width: 30%;">供应商编码：</text>
+				<text class="title" style="width: 40%;">供应商编码：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="coding" placeholder="请输入编码"></m-input>
 			</view>
 			<view class="input-row border">
@@ -35,11 +35,11 @@
 			<text>|</text>
 			<navigator url="../pwd/pwd">忘记密码</navigator>
 		</view> -->
-		<view class="oauth-row" v-if="hasProvider" v-bind:style="{top: positionTop + 'px'}">
+		<!-- <view class="oauth-row" v-if="hasProvider" v-bind:style="{top: positionTop + 'px'}">
 			<view class="oauth-image" v-for="provider in providerList" :key="provider.value">
 				<image :src="provider.image" @tap="oauth(provider.value)"></image>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -140,12 +140,13 @@
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
 				uni.request({
-				    url:`http://172.18.252.5:8081/xiaopro/api/supplier/${this.coding}`,//仅为示例，并非真实接口地址。
+				    url:`https://wccstest.ab-inbev.cn/WCCSAPI/WechatProgram.aspx?type=01&wsid=${this.coding}`,//仅为示例，并非真实接口地址。
 				    data: {},
 				    success: (res) => {
-						console.log(res.data.result.supplierName);
-						if (res.data.code == 1) { 
-								this.toMain(this.coding,res.data.result.supplierName,filterArr);
+						console.log(`${JSON.stringify(res.data)}`);
+						if (res.data.Result == "True") { 
+								this.toMain(this.coding,res.data.Info.NewDataSet.info[0].name,filterArr);
+						
 						}
 						else {
 							uni.showToast({
